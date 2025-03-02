@@ -1,10 +1,9 @@
-// Import required packages
 const TelegramBot = require('node-telegram-bot-api');
 const { HfInference } = require('@huggingface/inference');
 
-// Replace with your tokens
+// Your tokens
 const TELEGRAM_TOKEN = '7435111550:AAGggKVIoyYQI-UQmpqIyB31VEM6f2sINeY';
-const HF_TOKEN = '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'; // Replace hf_xxxxxxxxxxxxxxxxxxxxxxxx
+const HF_TOKEN = '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';
 
 // Initialize the Hugging Face client
 const hfClient = new HfInference(HF_TOKEN);
@@ -16,31 +15,20 @@ const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
   const userMessage = msg.text;
-  
-  // If the message is empty, ignore it
+
   if (!userMessage) return;
-  
+
   try {
-    // Send "typing..." action
     bot.sendChatAction(chatId, 'typing');
-    
-    // Get AI response using Hugging Face API
-    const chatCompletion = await hfClient.chatCompletion({
-      model: "deepseek-ai/DeepSeek-V3",
-      messages: [
-        {
-          role: "user",
-          content: userMessage
-        }
-      ],
-      provider: "together",
-      max_tokens: 500,
+
+    // Get AI response using Hugging Face text generation
+    const response = await hfClient.textGeneration({
+      model: 'bigscience/bloom',
+      inputs: userMessage,
+      parameters: { max_new_tokens: 100 }
     });
-    
-    // Extract and send the response
-    const aiResponse = chatCompletion.choices[0].message.content;
-    bot.sendMessage(chatId, aiResponse);
-    
+
+    bot.sendMessage(chatId, response.generated_text);
   } catch (error) {
     console.error('Error:', error);
     bot.sendMessage(chatId, 'Sorry, I encountered an error while processing your request.');
@@ -52,5 +40,4 @@ bot.on('polling_error', (error) => {
   console.error('Polling error:', error);
 });
 
-// Log when bot is running
 console.log('Bot is running...');
