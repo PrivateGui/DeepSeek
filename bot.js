@@ -17,17 +17,17 @@ bot.on('message', async (msg) => {
   try {
     bot.sendChatAction(chatId, 'typing');
 
-    // Use a smaller model: facebook/blenderbot-3B
-    const chatCompletion = await hfClient.chatCompletion({
-      model: "facebook/blenderbot-3B", // A working model
-      messages: [
-        { role: "user", content: userMessage }
-      ],
-      provider: "facebook",
-      max_tokens: 500,
+    // Use textGeneration instead of chatCompletion for BlenderBot
+    const chatCompletion = await hfClient.textGeneration({
+      model: "facebook/blenderbot-3B",  // A conversational model
+      inputs: userMessage,              // Text input to generate a response
+      parameters: {
+        max_new_tokens: 500,
+        temperature: 0.7,
+      },
     });
 
-    const aiResponse = chatCompletion.choices[0].message.content;
+    const aiResponse = chatCompletion.generated_text.trim();
     bot.sendMessage(chatId, aiResponse);
   } catch (error) {
     console.error('Error:', error);
