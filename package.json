@@ -1,0 +1,28 @@
+{
+  "name": "huggingface-telegram-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot that uses HuggingFace API to respond to messages",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "huggingface",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@huggingface/inference": "^2.6.1",
+    "node-telegram-bot-api": "^0.61.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
