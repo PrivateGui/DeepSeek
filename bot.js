@@ -17,13 +17,13 @@ bot.on('message', async (msg) => {
   try {
     bot.sendChatAction(chatId, 'typing');
 
-    // Use textGeneration instead of chatCompletion for BlenderBot
+    // Use textGeneration with a maximum token limit of 250
     const chatCompletion = await hfClient.textGeneration({
       model: "facebook/blenderbot-3B",  // A conversational model
       inputs: userMessage,              // Text input to generate a response
       parameters: {
-        max_new_tokens: 500,
-        temperature: 0.7,
+        max_new_tokens: 250,           // Set the token limit to 250
+        temperature: 0.7,               // Adjust temperature for randomness
       },
     });
 
