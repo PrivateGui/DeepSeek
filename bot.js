@@ -17,13 +17,13 @@ bot.on('message', async (msg) => {
   try {
     bot.sendChatAction(chatId, 'typing');
 
-    // Use the model "perplexity-ai/r1-1776"
+    // Use a smaller model: facebook/blenderbot-3B
     const chatCompletion = await hfClient.chatCompletion({
-      model: "perplexity-ai/r1-1776", // Your chosen model
+      model: "facebook/blenderbot-3B", // A working model
       messages: [
         { role: "user", content: userMessage }
       ],
-      provider: "fireworks-ai",
+      provider: "facebook",
       max_tokens: 500,
     });
 
