@@ -17,11 +17,13 @@ bot.on('message', async (msg) => {
   try {
     bot.sendChatAction(chatId, 'typing');
 
-    // Correct Hugging Face API call
+    // Use the model "perplexity-ai/r1-1776"
     const chatCompletion = await hfClient.chatCompletion({
-      model: "deepseek-ai/DeepSeek-V3",
-      messages: [{ role: "user", content: userMessage }],
-      provider: "together",
+      model: "perplexity-ai/r1-1776", // Your chosen model
+      messages: [
+        { role: "user", content: userMessage }
+      ],
+      provider: "fireworks-ai",
       max_tokens: 500,
     });
 
