@@ -17,17 +17,16 @@ bot.on('message', async (msg) => {
   try {
     bot.sendChatAction(chatId, 'typing');
 
-    // Try using text generation instead of conversational
-    const response = await hfClient.textGeneration({
-      model: 'mistralai/Mistral-7B-Instruct', // Use a model that works with text generation
-      inputs: userMessage,
-      parameters: {
-        max_new_tokens: 200,
-        temperature: 0.7,
-      },
+    // Correct Hugging Face API call
+    const chatCompletion = await hfClient.chatCompletion({
+      model: "deepseek-ai/DeepSeek-V3",
+      messages: [{ role: "user", content: userMessage }],
+      provider: "together",
+      max_tokens: 500,
     });
 
-    bot.sendMessage(chatId, response.generated_text.trim());
+    const aiResponse = chatCompletion.choices[0].message.content;
+    bot.sendMessage(chatId, aiResponse);
   } catch (error) {
     console.error('Error:', error);
     bot.sendMessage(chatId, '💀 I broke while answering. Error: ' + error.message);
