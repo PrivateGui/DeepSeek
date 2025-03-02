@@ -11,7 +11,6 @@ const hfClient = new HfInference(HF_TOKEN);
 // Create a new bot instance
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 
-// Listen for any message
 bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
   const userMessage = msg.text;
@@ -21,17 +20,23 @@ bot.on('message', async (msg) => {
   try {
     bot.sendChatAction(chatId, 'typing');
 
-    // Get AI response using Hugging Face text generation
-    const response = await hfClient.textGeneration({
-      model: 'bigscience/bloom',
-      inputs: userMessage,
-      parameters: { max_new_tokens: 100 }
+    // Get AI response using Hugging Face conversational API
+    const response = await hfClient.conversational({
+      model: 'deepseek-ai/DeepSeek-V3',
+      inputs: {
+        past_user_inputs: [],
+        generated_responses: [],
+        text: userMessage,
+      },
+      parameters: {
+        max_new_tokens: 500,
+      }
     });
 
     bot.sendMessage(chatId, response.generated_text);
   } catch (error) {
     console.error('Error:', error);
-    bot.sendMessage(chatId, 'Sorry, I encountered an error while processing your request.');
+    bot.sendMessage(chatId, '💀 I broke while answering.');
   }
 });
 
